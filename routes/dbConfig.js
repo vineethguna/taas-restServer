@@ -9,7 +9,7 @@
 //dependencies
 var mysql = require('mysql');
 
-var DBHOST = "localhost";
+var DBHOST = "localhost"; //"mysqltestdbinstance.chdy3grdylcm.ap-southeast-1.rds.amazonaws.com";
 var DBUSERNAME = "root";
 var DBPASSWORD = "root";
 var DBPORT = "3306";

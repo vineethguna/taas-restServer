@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ee91d5a4-c0cb-4581-aa7f-08283ce2365b" name="Default" comment="Initial commit with basic functionalities">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/appOperations.js" afterPath="$PROJECT_DIR$/routes/appOperations.js" />
+    <list default="true" id="ee91d5a4-c0cb-4581-aa7f-08283ce2365b" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/dbConfig.js" afterPath="$PROJECT_DIR$/routes/dbConfig.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/dbOperations.js" afterPath="$PROJECT_DIR$/routes/dbOperations.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="taas-restServer.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -15,12 +13,12 @@
     <file path="/queryGenerator.js" changelist="ee91d5a4-c0cb-4581-aa7f-08283ce2365b" time="1381123776243" ignored="false" />
     <file path="/metadata.js" changelist="ee91d5a4-c0cb-4581-aa7f-08283ce2365b" time="1381131056299" ignored="false" />
     <file path="/queryExecutor.js" changelist="ee91d5a4-c0cb-4581-aa7f-08283ce2365b" time="1381035075459" ignored="false" />
-    <file path="/dbOperations.js" changelist="ee91d5a4-c0cb-4581-aa7f-08283ce2365b" time="1381164610275" ignored="false" />
+    <file path="/dbOperations.js" changelist="ee91d5a4-c0cb-4581-aa7f-08283ce2365b" time="1381169085221" ignored="false" />
     <file path="/app.js" changelist="ee91d5a4-c0cb-4581-aa7f-08283ce2365b" time="1381163216240" ignored="false" />
     <file path="/test.js" changelist="ee91d5a4-c0cb-4581-aa7f-08283ce2365b" time="1381128300385" ignored="false" />
     <file path="/dbConfig.js" changelist="ee91d5a4-c0cb-4581-aa7f-08283ce2365b" time="1381161465446" ignored="false" />
     <file path="/helper.js" changelist="ee91d5a4-c0cb-4581-aa7f-08283ce2365b" time="1381162242911" ignored="false" />
-    <file path="/Dummy.txt" changelist="ee91d5a4-c0cb-4581-aa7f-08283ce2365b" time="1381162704446" ignored="false" />
+    <file path="/Dummy.txt" changelist="ee91d5a4-c0cb-4581-aa7f-08283ce2365b" time="1381169119989" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -833,19 +831,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="app.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="app.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="31" column="85" selection-start="840" selection-end="840" vertical-scroll-proportion="0.27096775">
+            <state line="8" column="53" selection-start="157" selection-end="157" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dbOperations.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="dbOperations.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/dbOperations.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="25" column="92" selection-start="1267" selection-end="1267" vertical-scroll-proportion="0.0">
+            <state line="26" column="9" selection-start="1302" selection-end="1302" vertical-scroll-proportion="0.75">
               <folding />
             </state>
           </provider>
@@ -856,6 +854,17 @@
           <provider selected="true" editor-type-id="text-editor">
             <state line="15" column="40" selection-start="420" selection-end="420" vertical-scroll-proportion="0.0">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dbConfig.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/routes/dbConfig.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="13" column="22" selection-start="351" selection-end="351" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="e#0#159#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -901,13 +910,13 @@
         <option value="$PROJECT_DIR$/routes/queryExecutor.js" />
         <option value="$PROJECT_DIR$/routes/test.js" />
         <option value="$PROJECT_DIR$/routes/queryGenerator.js" />
-        <option value="$PROJECT_DIR$/routes/dbConfig.js" />
         <option value="$PROJECT_DIR$/routes/constants.js" />
         <option value="$PROJECT_DIR$/routes/metadata.js" />
         <option value="$PROJECT_DIR$/routes/helper.js" />
         <option value="$PROJECT_DIR$/routes/backup.js" />
         <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/routes/appOperations.js" />
+        <option value="$PROJECT_DIR$/routes/dbConfig.js" />
         <option value="$PROJECT_DIR$/routes/dbOperations.js" />
       </list>
     </option>
@@ -1057,15 +1066,15 @@
     <frame x="65" y="24" width="1301" height="648" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3289225" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2492163" sideWeight="0.672" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2492163" sideWeight="0.67" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.356" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.328" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.328" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1184,15 +1193,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/dbConfig.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="12" selection-start="511" selection-end="511" vertical-scroll-proportion="0.56962025">
-          <folding>
-            <element signature="e#0#159#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/routes/constants.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="3" column="0" selection-start="73" selection-end="73" vertical-scroll-proportion="0.094936706">
@@ -1230,13 +1230,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/test.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="40" selection-start="420" selection-end="420" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/routes/queryGenerator.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="148" column="0" selection-start="4284" selection-end="4284" vertical-scroll-proportion="0.0">
@@ -1244,16 +1237,32 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/dbOperations.js">
+    <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="92" selection-start="1267" selection-end="1267" vertical-scroll-proportion="0.0">
+        <state line="8" column="53" selection-start="157" selection-end="157" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
+    <entry file="file://$PROJECT_DIR$/routes/test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="85" selection-start="840" selection-end="840" vertical-scroll-proportion="0.27096775">
+        <state line="15" column="40" selection-start="420" selection-end="420" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/dbConfig.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="22" selection-start="351" selection-end="351" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#0#159#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/dbOperations.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="9" selection-start="1302" selection-end="1302" vertical-scroll-proportion="0.75">
           <folding />
         </state>
       </provider>

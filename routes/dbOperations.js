@@ -18,7 +18,7 @@ exports.createAppTable = function(req, res){
                 var query2 = queryGenerator.SelectTableQuery(connection, constants.APPS, "id", "name eq '" + appName + "'");
                 var multipleQueries = [query1, query2].join(";");
                 connection.query(multipleQueries, function(err, results){
-                   if(!err){
+                   if(!err && results[1].length > 0){
                        appID = results[1][0].id;
                        var query = queryGenerator.SelectTableQuery(connection, constants.metadataEntities, "*",
                        "appID eq "+ appID + " and tableName eq '" + tableName + "'");
