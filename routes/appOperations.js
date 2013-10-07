@@ -11,7 +11,7 @@ var pool = mysql.pool;
 exports.CreateApp = function(req, res){
     var appName = req.params.appName;
     var parameters = [appName];
-    if(checkForNullValues(parameters)){
+    if(helper.checkForNullValues(parameters)){
         pool.getConnection(function(err, connection){
            if(!err){
                var query = queryGenerator.InsertRecordQuery(connection, constants.APPS, ["name"], [appName]);
@@ -62,7 +62,7 @@ exports.UpdateApp = function(req, res){
         var present_app_name = req.body.presentAppName;
         var new_app_name = req.body.newAppName;
         var parameters = [present_app_name, new_app_name];
-        if(checkForNullValues(parameters)){
+        if(helper.checkForNullValues(parameters)){
 
         }
         else{

@@ -21,9 +21,11 @@ exports.createAppTable = function(req, res){
                    if(!err){
                        appID = results[1][0].id;
                        var query = queryGenerator.SelectTableQuery(connection, constants.metadataEntities, "*",
-                       "appID eq "+ appID + "and tableName eq '" + tableName + "'");
+                       "appID eq "+ appID + " and tableName eq '" + tableName + "'");
                        connection.query(query, function(err, result){
-                           if(!err && result == []){
+                           console.log(err);
+                           console.log(result);
+                           if(err == null && result.length == 0){
                                var fieldMetadata = helper.getFieldInfoForMetaDataTable(appID, tableName, req.body);
                                var query1 = queryGenerator.InsertMultipleRecordQuery(connection, constants.metadataFields,
                                    constants.metadataFieldsCols, fieldMetadata);
