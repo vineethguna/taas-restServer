@@ -28,7 +28,7 @@ function getAllRunningApps(req, res){
                     res.json({"data": result});
                 }
                 else{
-                    res.json(constants.QueryFailed);
+                    mysql.ErrorHandler(res,err);
                 }
             });
             connection.release();
@@ -54,7 +54,7 @@ function getAppMetadata(req, res, appName){
                }
                else{
                    console.log(err);
-                   res.json(constants.QueryFailed);
+                   mysql.ErrorHandler(res,err);
                }
             });
             connection.release();
@@ -82,7 +82,7 @@ exports.getTableMetadata = function(req, res){
                         res.json({"data": result});
                   }
                   else{
-                        res.json(constants.QueryFailed);
+                      mysql.ErrorHandler(res,err);
                   }
                });
                connection.release();

@@ -22,5 +22,5 @@ exports.DatabaseConnectionError = {"Error": "Error Connecting to Database"};
 exports.QueryFailed = {"Error": "Query Failed"};
 exports.InternalError = {"Error": "Internal Error Occured"};
 exports.DuplicateEntry = {"Error": "Duplicate Entry given"};
-
+exports.appDoesNotExist = {"Error": "Given App Does Not exist"};
 

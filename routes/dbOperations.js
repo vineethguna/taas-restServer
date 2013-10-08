@@ -40,13 +40,13 @@ exports.createAppTable = function(req, res){
                                                res.json({"Success": "Transaction Succeded"});
                                            }
                                            else{
-                                               res.json({"Error": "Transaction failed"});
+                                                mysql.ErrorHandler(res,err);
                                            }
                                        });
                                    }
                                    else{
                                        console.log(err);
-                                       res.json({"Error": "Transaction failed"});
+                                       mysql.ErrorHandler(res,err);
                                        connection.query("ROLLBACK", function(err, result){
                                            console.log(result);
                                        });
@@ -54,14 +54,23 @@ exports.createAppTable = function(req, res){
                                });
                            }
                            else{
-                               res.json({"Error": "Table Already Exists"});
+                               if(!err){
+                                   res.json({"Error": "Table Already Exists"});
+                               }
+                               else{
+                                   mysql.ErrorHandler(res,err);
+                               }
                            }
                        });
 
                    }
                    else{
-                        console.log(err);
-                       res.json({"Error": "Transaction failed"});
+                       if(!err){
+                            res.json(constants.appDoesNotExist);
+                       }
+                       else{
+                           mysql.ErrorHandler(res,err);
+                       }
                    }
 
                 });
@@ -96,14 +105,12 @@ exports.insertIntoAppTable = function(req, res){
                                 res.json({"id": result.insertId});
                           }
                           else{
-                              console.log(err);
-                              res.json(constants.QueryFailed);
+                              mysql.ErrorHandler(res,err);
                           }
                        });
                    }
                    else{
-                        console.log(err);
-                        res.json(constants.QueryFailed);
+                       mysql.ErrorHandler(res,err);
                    }
                });
                connection.release();
@@ -136,14 +143,12 @@ exports.fetchRecordsFromAppTable = function(req, res){
                                 res.json({"data": result});
                             }
                             else{
-                                console.log(err);
-                                res.json(constants.QueryFailed);
+                                mysql.ErrorHandler(res,err);
                             }
                         });
                     }
                     else{
-                        console.log(err);
-                        res.json(constants.QueryFailed);
+                        mysql.ErrorHandler(res,err);
                     }
                 });
                 connection.release();

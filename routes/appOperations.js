@@ -20,12 +20,7 @@ exports.CreateApp = function(req, res){
                         res.json({"id": result.insertId, "name": appName});
                   }
                   else{
-                      if(err.code == 'ER_DUP_ENTRY'){
-                          res.json(constants.DuplicateEntry);
-                      }
-                      else{
-                          res.json(constants.QueryFailed);
-                      }
+                      mysql.ErrorHandler(res,err);
                   }
                });
                connection.release();
