@@ -8,10 +8,11 @@
 
 //dependencies
 var mysql = require('mysql');
+var logger = require('./logger');
 
-var DBHOST = "mysqltestdbinstance.chdy3grdylcm.ap-southeast-1.rds.amazonaws.com";
-var DBUSERNAME = "vineethguna";
-var DBPASSWORD = "vineethguna";
+var DBHOST = "localhost";//"mysqltestdbinstance.chdy3grdylcm.ap-southeast-1.rds.amazonaws.com";
+var DBUSERNAME = "root";
+var DBPASSWORD = "root";
 var DBPORT = "3306";
 var DATABASE = 'testdb';
 
@@ -27,33 +28,34 @@ exports.pool = mysql.createPool({
 
 
 //error handler
-exports.ErrorHandler = function(res, err){
-    var errorCode = err.code;
+exports.ErrorHandler = function(res,err){
+    var errorCode = err.code, errorMessage;
     if(errorCode == 'PROTOCOL_CONNECTION_LOST'){
-        res.json({"Error": "Connection Lost to Mysql Server"});
+        errorMessage = "Connection Lost to Mysql Server";
     }
     else if(errorCode == 'ER_ACCESS_DENIED_ERROR'){
-        res.json({"Error": "Access Denied"});
+        errorMessage = "Access Denied";
     }
     else if(errorCode == 'ER_CANT_CREATE_TABLE'){
-        res.json({"Error": "Cannot Create Table"});
+        errorMessage = "Cannot Create Table";
     }
     else if(errorCode == 'ER_CANT_CREATE_DB'){
-        res.json({"Error": "Error creating Database"});
+        errorMessage = "Error creating Database";
     }
     else if(errorCode == 'ER_TABLE_EXISTS_ERROR'){
-        res.json({"Error": "TABLE Already Exists"});
+        errorMessage = "TABLE Already Exists"
     }
     else if(errorCode == 'ER_PARSE_ERROR'){
-        res.json({"Error": "Error in given Parameters"});
+        errorMessage = "Error in given Parameters"
     }
     else if(errorCode == 'ER_DUP_ENTRY'){
-        res.json({"Error": "Duplicate Entry Given"});
+        errorMessage = "Duplicate Entry Given";
     }
     else{
-        res.json({"Error": "Unknown SQL error"});
+        errorMessage = "Unknown SQL error"
     }
-
+    logger.log('error', "SQL ERROR: " + errorMessage);
+    res.json({"Error": errorMessage});
 }
 
 

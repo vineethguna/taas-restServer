@@ -1,3 +1,4 @@
+var logger = require('./logger');
 var mysql = require('./dbConfig');
 var queryGenerator = require('./queryGenerator');
 var constants = require('./constants');
@@ -22,9 +23,11 @@ exports.handleAppMetadata = function(req, res){
 function getAllRunningApps(req, res){
     pool.getConnection(function(err, connection){
         if(!err){
+            logger.log('info', constants.ConnectionEstablishedLog);
             var query = queryGenerator.SelectTableQuery(connection, constants.APPS, "*");
             connection.query(query, function(err, result){
                 if(!err){
+                    logger.log('success', constants.SuccessLog);
                     res.json({"data": result});
                 }
                 else{
@@ -32,8 +35,10 @@ function getAllRunningApps(req, res){
                 }
             });
             connection.release();
+            logger.log('info', constants.ConnectionReleasedLog);
         }
         else{
+            logger.log('error', constants.DatabaseConnectionErrorLog); 
             res.json(constants.DatabaseConnectionError);
         }
     });
@@ -50,6 +55,7 @@ function getAppMetadata(req, res, appName){
             console.log(query);
             connection.query(query, function(err, result){
                if(!err){
+                    logger.log('success', constants.SuccessLog);
                     res.json({"data": result});
                }
                else{
@@ -58,8 +64,10 @@ function getAppMetadata(req, res, appName){
                }
             });
             connection.release();
+            logger.log('info', constants.ConnectionReleasedLog);
         }
         else{
+            logger.log('error', constants.DatabaseConnectionErrorLog);        
             res.json(constants.DatabaseConnectionError);
         }
     });
@@ -79,20 +87,24 @@ exports.getTableMetadata = function(req, res){
                                                             null, null, nestedQuery);
                connection.query(query, function(err, result){
                   if(!err){
-                        res.json({"data": result});
+                      logger.log('success', constants.SuccessLog);
+                      res.json({"data": result});
                   }
                   else{
                       mysql.ErrorHandler(res,err);
                   }
                });
                connection.release();
+               logger.log('info', constants.ConnectionReleasedLog);
            }
            else{
+               logger.log('error', constants.DatabaseConnectionErrorLog); 
                res.json(constants.DatabaseConnectionError);
            }
         });
     }
     else{
-        res.json(constants.InternalError);
+        logger.log('error', constants.InternalErrorLog);
+        res.json(constants.DatabaseConnectionError);
     }
 }

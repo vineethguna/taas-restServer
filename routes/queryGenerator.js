@@ -9,7 +9,7 @@
 //dependencies
 var util = require('util');
 var constants = require('./constants');
-
+var logger = require('./logger');
 
 //skeletons for queries
 var CREATE_TABLE_SKELETON = "CREATE TABLE %s (%s)";
@@ -26,6 +26,7 @@ var SELECT_SKELETON = "SELECT %s FROM %s %s";
 exports.CreateTableQuery = function(tableName, schema){
     if(typeof tableName == 'string' && typeof schema == 'string'){
         var query = util.format(CREATE_TABLE_SKELETON, tableName, schema);
+        logger.log('info', "CREATE QUERY: " + query);
         return query;
     }
     else{
@@ -38,7 +39,8 @@ exports.CreateTableQuery = function(tableName, schema){
 exports.DropTableQuery = function(tableName){
      if(typeof tableName == 'string'){
         var query = util.format(DROP_TABLE_SKELETON, tableName);
-         return query;
+         logger.log('info', "DROP QUERY: " + query);
+        return query;
      }
      return '';
 }
@@ -73,23 +75,28 @@ exports.SelectTableQuery = function(conn, tableName, fields, where, orderByClaus
     if(nestedQuery != null){
         extensionString += ' IN (' + nestedQuery + ')';
     }
-    return util.format(SELECT_SKELETON, fieldsString, tableName, extensionString);
+    var query = util.format(SELECT_SKELETON, fieldsString, tableName, extensionString);
+    logger.log('info', "(SELECT QUERY): " + query);
+    return query;
 }
 
 
 //creates query for inserting a record into table based on parameters given
 exports.InsertRecordQuery = function(conn, tableName, fields, fieldValues){
+    var query = '';
     if(conn != null){
         var fieldsString = convertListToString(fields, ", ");
         var fieldValuesString = convertListToDBString(conn, fieldValues, ", ");
-        return util.format(INSERT_RECORD_SKELETON, tableName, fieldsString, fieldValuesString);
+        query = util.format(INSERT_RECORD_SKELETON, tableName, fieldsString, fieldValuesString);
     }
-    return '';
+    logger.log('info', "(INSERT QUERY): " + query);
+    return query;
 }
 
 
 //creates query for inserting multiple records into table based on parameters given
 exports.InsertMultipleRecordQuery = function(conn, tableName, fields, mulFieldValues){
+    var query = '';
     if(conn != null){
         var fieldValuesList = [];
         var fieldsString = convertListToString(fields, ", ");
@@ -97,9 +104,10 @@ exports.InsertMultipleRecordQuery = function(conn, tableName, fields, mulFieldVa
             fieldValuesList.push('(' + convertListToDBString(conn, mulFieldValues[index], ", ") + ')');
         }
         fieldValuesList = fieldValuesList.join(', ');
-        return util.format(INSERT_MULTIPLE_RECORD_SKELETON, tableName, fieldsString, fieldValuesList);
+        query = util.format(INSERT_MULTIPLE_RECORD_SKELETON, tableName, fieldsString, fieldValuesList);
     }
-    return '';
+    logger.log('info', "(INSERT QUERY): " + query);
+    return query;
 }
 
 
@@ -115,10 +123,12 @@ exports.UpdateRecordQuery = function(){
 }
 
 exports.CountQuery = function(tableName){
+    var query = ''
     if(tableName != null){
-        return util.format(COUNT_SKELETON, tableName);
+        query = util.format(COUNT_SKELETON, tableName);
     }
-    return '';
+    logger.log('info', "(COUNT QUERY): " + query);
+    return query;
 }
 
 

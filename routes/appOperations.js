@@ -3,6 +3,7 @@ var mysql = require('./dbConfig');
 var constants = require('./constants');
 var queryGenerator = require('./queryGenerator');
 var helper = require('./helper');
+var logger = require('./logger');
 
 
 //creating a pool of resources for mysql
@@ -14,9 +15,11 @@ exports.CreateApp = function(req, res){
     if(helper.checkForNullValues(parameters)){
         pool.getConnection(function(err, connection){
            if(!err){
+               logger.log('info', constants.ConnectionEstablishedLog);
                var query = queryGenerator.InsertRecordQuery(connection, constants.APPS, ["name"], [appName]);
                connection.query(query, function(err, result){
                   if(!err){
+                        logger.log('success', constants.SuccessLog);
                         res.json({"id": result.insertId, "name": appName});
                   }
                   else{
@@ -24,13 +27,16 @@ exports.CreateApp = function(req, res){
                   }
                });
                connection.release();
+               logger.log('info', constants.ConnectionReleasedLog);
            }
            else{
+                logger.log('error', constants.DatabaseConnectionError);
                 res.json(constants.DatabaseConnectionError);
            }
         });
     }
     else{
+        logger.log('error', constants.InternalErrorLog);
         res.json(constants.InvalidParameters);
     }
 }

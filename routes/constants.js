@@ -24,3 +24,10 @@ exports.InternalError = {"Error": "Internal Error Occured"};
 exports.DuplicateEntry = {"Error": "Duplicate Entry given"};
 exports.appDoesNotExist = {"Error": "Given App Does Not exist"};
 
+//log Messages
+exports.InternalErrorLog = "Internal Error Occurred";
+exports.ConnectionReleasedLog = "MYSQL Connection Released";
+exports.DatabaseConnectionErrorLog = "Error Connecting To Database";
+exports.ConnectionEstablishedLog = "MYSQL Connection Established";
+exports.SuccessLog = "Operation Successful";
+

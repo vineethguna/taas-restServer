@@ -12,9 +12,15 @@ var constants = require('./constants');
 
 var modelDef = {"id": {"type": "int", "properties": ["auto_increment"], "key": true},
                 "name": {"type": "varchar(40)", "properties": ["unique", "not null"]}
-               }
+               };
 
-function generateSchemaFromModelDef(modelDef){
+var logger = require('./logger');
+logger.debugLevel = 'warn';
+logger.log('info', 'Everything started properly.');
+logger.log('warn', 'Running out of memory...');
+logger.log('error', [1,2,3,4]);
+
+/*function generateSchemaFromModelDef(modelDef){
     if(modelDef != null){
         var primarykeyFields = [], foreignKeyFields = [], typeFields = [];
         var primaryKeySkeleton = "PRIMARY KEY (%s)";
@@ -85,4 +91,4 @@ function handleForeignKey(field, references, list){
 }
 
 var b = generateSchemaFromModelDef(modelDef);
-console.log(b);
+console.log(b);*/
