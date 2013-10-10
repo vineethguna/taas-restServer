@@ -36,3 +36,17 @@ exports.SuccessLog = "Operation Successful";
 exports.MethodNotFoundLog = "Given URL not found or Requested Method For given URL not found";
 exports.ContentTypeMismatchLog = "Content-type Mismatch, Content-Type should be application/json";
 
+
+//JSON defining rest parameters
+
+exports.index = {'/apps/metadata': {"type": "GET", "parameters": null, "function": "Lists All Running Apps"},
+                 '/[appName]/metadata': {"type": "GET", "parameters": null, "function": "Lists All tables associated with the App"},
+                 '/[appName]/[tableName]/metadata': {"type": "GET", "parameters": null, "function": "Gives the metadata of" +
+                     "table specified in given app"},
+                '/[appName]': {"type": "POST", "parameters": null, "function": "Creates new App with app Name"},
+                '/[appName]/[tableName]': {"type": "POST", "parameters": "JSON data representing schema of table",
+                                            "function": "Creates a table with the mentioned schema in the given app"},
+                '/[appName]/[tableName]/insert': {"type": "POST", "parameters": "JSON data representing the data to be inserted",
+                                                    "function": "Inserts a record into specified table in given app"},
+                '/[appName]/[tableName]/fetch': {"type": "GET", "parameters": null, "function": "Fetched all the records in given table"}};
+

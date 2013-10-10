@@ -3,7 +3,8 @@ var constants = require('./constants');
 var logger = require('./logger');
 
 exports.index = function(req, res){
-  res.render('index', { title: 'Express' });
+  logger.log('info', "Fetching functions of rest server");
+  res.json(constants.index);
 };
 
 
