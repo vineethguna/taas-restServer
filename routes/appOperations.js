@@ -12,7 +12,7 @@ var pool = mysql.pool;
 exports.CreateApp = function(req, res){
     var appName = req.params.appName;
     var parameters = [appName];
-    if(helper.checkForNullValues(parameters)){
+    if(helper.checkForNullValues(parameters) && appName != 'apps'){
         pool.getConnection(function(err, connection){
            if(!err){
                logger.log('info', constants.ConnectionEstablishedLog);

@@ -28,7 +28,12 @@ function getAllRunningApps(req, res){
             connection.query(query, function(err, result){
                 if(!err){
                     logger.log('success', constants.SuccessLog);
-                    res.json({"data": result});
+                    if(result.length > 0){
+                        res.json({"data": result});
+                    }
+                    else{
+                        res.json(constants.NoApps);
+                    }
                 }
                 else{
                     mysql.ErrorHandler(res,err);
@@ -52,11 +57,15 @@ function getAppMetadata(req, res, appName){
             var nestedQuery = queryGenerator.SelectTableQuery(connection, constants.APPS, "id", "name eq '" + appName + "'");
             var query = queryGenerator.SelectTableQuery(connection, constants.metadataEntities, "appID,tableName", "appID", null,
                                                         null, null, nestedQuery);
-            console.log(query);
             connection.query(query, function(err, result){
                if(!err){
                     logger.log('success', constants.SuccessLog);
-                    res.json({"data": result});
+                    if(result.length > 0){
+                        res.json({"data": result});
+                    }
+                    else{
+                        res.json(constants.Notables);
+                    }
                }
                else{
                    console.log(err);
@@ -107,4 +116,4 @@ exports.getTableMetadata = function(req, res){
         logger.log('error', constants.InternalErrorLog);
         res.json(constants.DatabaseConnectionError);
     }
-}
+};

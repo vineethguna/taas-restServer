@@ -10,6 +10,7 @@ var path = require('path');
 var appOperations = require('./routes/appOperations');
 var metadata = require('./routes/metadata');
 var dbops = require('./routes/dbOperations');
+var index = require('./routes/index');
 
 var app = express();
 
@@ -39,6 +40,7 @@ app.post('/:appName', appOperations.CreateApp);
 app.post('/:appName/:tableName', dbops.createAppTable);
 app.post('/:appName/:tableName/insert', dbops.insertIntoAppTable);
 app.get('/:appName/:tableName/fetch', dbops.fetchRecordsFromAppTable);
+app.all('*', index.ErrorData);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

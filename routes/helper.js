@@ -1,10 +1,3 @@
-/**
- * Created with JetBrains WebStorm.
- * User: vineeth
- * Date: 10/7/13
- * Time: 9:36 PM
- * To change this template use File | Settings | File Templates.
- */
 var util = require('util');
 
 exports.checkForNullValues = function(list){
@@ -21,12 +14,12 @@ exports.checkForNullValues = function(list){
 
 exports.returnFieldsAndFieldValues = function(json_object){
     var fields = [];
-    var fieldvalues = [];
+    var fieldValues = [];
     for(var key in json_object){
         fields.push(key);
-        fieldvalues.push(json_object[key]);
+        fieldValues.push(json_object[key]);
     }
-    return [fields, fieldvalues];
+    return [fields, fieldValues];
 }
 
 exports.generateSchemaFromModelDef = function(modelDef){
