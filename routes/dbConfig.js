@@ -10,9 +10,9 @@
 var mysql = require('mysql');
 var logger = require('./logger');
 
-var DBHOST = "localhost";//"mysqltestdbinstance.chdy3grdylcm.ap-southeast-1.rds.amazonaws.com";
-var DBUSERNAME = "root";
-var DBPASSWORD = "root";
+var DBHOST = "mysqltestdbinstance.chdy3grdylcm.ap-southeast-1.rds.amazonaws.com";
+var DBUSERNAME = "vineethguna";
+var DBPASSWORD = "vineethguna";
 var DBPORT = "3306";
 var DATABASE = 'testdb';
 
