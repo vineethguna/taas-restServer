@@ -37,10 +37,14 @@ app.get('/', routes.index);
 app.get('/:appName/metadata', metadata.handleAppMetadata);
 app.get('/:appName/:tableName/metadata', metadata.getTableMetadata);
 app.post('/:appName', appOperations.CreateApp);
+app.post('/:appName/join', dbops.JoinOnTables);
 app.post('/:appName/:tableName', dbops.createAppTable);
 app.post('/:appName/:tableName/insert', dbops.insertIntoAppTable);
 app.get('/:appName/:tableName/fetch', dbops.fetchRecordsFromAppTable);
+app.del('/:appName/:tableName/delete', dbops.DeleteRecordsFromTable);
+app.put('/:appName/:tableName/update', dbops.UpdateRecordInTable);
 app.all('*', index.ErrorData);
+
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

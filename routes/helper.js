@@ -1,4 +1,5 @@
 var util = require('util');
+var queryGenerator = require('./queryGenerator');
 
 exports.checkForNullValues = function(list){
     if(list != null){
@@ -122,4 +123,59 @@ function inArray(array, element){
         return false;
     }
     return false;
+}
+
+
+exports.processJoinData = function(conn, appID, joinData){
+    if(joinData != null && joinData.relation1 != null){
+        var relation1 = appID + '_' + joinData.relation1;
+        var relation2 = handleNestedJoins(appID, joinData.relation2);
+        var joinString = queryGenerator.JoinQuery(joinData.type, relation1, relation2, joinData.on, joinData.using);
+        if(joinData.query.toLowerCase() == 'select'){
+            return queryGenerator.SelectTableQuery(conn, joinString, joinData.fields, joinData.where, joinData.orderBy,
+                                                    joinData.groupBy, joinData.limit);
+        }
+        else{
+            return queryGenerator.DeleteRecordQuery(joinString, joinData.where, join.orderBy, join.limit);
+        }
+    }
+    return '';
+}
+
+function handleNestedJoins(appID, relation2){
+    var joinString;
+    var stack = [];
+    while(relation2 != null && typeof relation2 != 'string'){
+        stack.push(relation2.relation1);
+        var temp = {"type": relation2.type, "on": relation2.on, "using": relation2.using};
+        stack.push(temp);
+        relation2 = relation2.relation2;
+    }
+    if(relation2!=null){
+        stack.push(appID + '_' + relation2);
+    }
+    else{
+        stack.push('');
+    }
+    if(stack.length >= 3){
+        while(true){
+            var op2 = stack.pop();
+            var op = stack.pop();
+            var op1 = appID + '_' + stack.pop();
+            if(op2 != null && op!=null && op1 != null){
+                stack.push(queryGenerator.JoinQuery(op.type, op1, op2, op.on, op.using));
+            }
+            else{
+                break;
+            }
+        }
+    }
+    joinString = stack.pop();
+    /*if(relation2 != null && typeof relation2 != 'string'){
+
+    }
+    else{
+        joinString += relation2;
+    }*/
+    return joinString;
 }

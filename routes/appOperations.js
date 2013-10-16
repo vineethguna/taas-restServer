@@ -42,18 +42,33 @@ exports.CreateApp = function(req, res){
 }
 
 exports.DeleteApp = function(req, res){
-    if(req.method == 'DELETE'){
-        var app_name = req.body.appName;
-        var parameters = [app_name];
-        if(helper.checkForNullValues(parameters)){
-
-        }
-        else{
-            res.json(constants.InvalidParameters);
-        }
+    var app_name = req.body.appName;
+    var parameters = [app_name];
+    if(helper.checkForNullValues(parameters) && req.get('Content-Type') == 'application/json'){
+        pool.getConnection(function(err, connection){
+            if(!err){
+                logger.log('info', constants.ConnectionEstablishedLog);
+                var query = queryGenerator.DeleteRecordQuery("apps", "name eq " + "'" + app_name + "'");
+                connection.query(query, function(err, result){
+                    if(!err){
+                        logger.log('success', constants.SuccessLog);
+                        res.json({"id": result.insertId, "name": appName});
+                    }
+                    else{
+                        mysql.ErrorHandler(res,err);
+                    }
+                });
+                connection.release();
+                logger.log('info', constants.ConnectionReleasedLog);
+            }
+            else{
+                logger.log('error', constants.DatabaseConnectionError);
+                res.json(constants.DatabaseConnectionError);
+            }
+        });
     }
     else{
-        res.json(constants.methodNotFound);
+        res.json(constants.InvalidParameters);
     }
 
 }

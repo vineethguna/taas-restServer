@@ -26,6 +26,9 @@ exports.appDoesNotExist = {"Error": "Given App Does Not exist"};
 exports.ContentTypeMismatch = {"Error": "Content-type Mismatch, Contet-Type should be application/json"};
 exports.NoApps = {"data": "No Apps Present"};
 exports.Notables = {"data": "There are no tables Associated with this app or given app does not exist"};
+exports.appDeleted = {"data": "APP DELETED Successfully"};
+exports.Recordupdated = {"data": "Record Updated"};
+exports.RecordDeleted = {"data": "Record Deleted"};
 
 //log Messages
 exports.InternalErrorLog = "Internal Error Occurred";

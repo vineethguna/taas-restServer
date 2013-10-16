@@ -17,9 +17,14 @@ var DROP_TABLE_SKELETON = "DROP TABLE IF EXISTS %s";
 var INSERT_RECORD_SKELETON = "INSERT INTO %s(%s) VALUES(%s)";
 var INSERT_MULTIPLE_RECORD_SKELETON = "INSERT INTO %s(%s) VALUES %s";
 var COUNT_SKELETON = "SELECT COUNT(*) FROM %s";
-var UPDATE_BASE_SKELETON = "UPDATE %s SET %s WHERE %s;";
-var DELETE_BASE_SKELETON = "DELETE FROM %s %s;";
+var UPDATE_BASE_SKELETON = "UPDATE %s SET %s %s";
+var DELETE_BASE_SKELETON = "DELETE FROM %s %s";
 var SELECT_SKELETON = "SELECT %s FROM %s %s";
+var INNER_JOIN_SKELETON = "%s INNER JOIN %s %s";
+var CROSS_JOIN_SKELETON = "%s CROSS JOIN %s";
+var NATURAL_JOIN_SKELETON = "%s NATURAL %s JOIN %s %s";
+var OUTER_JOIN_SKELETON = "%s %s OUTER JOIN %s %s";
+var JOIN_SKELETON = "%s JOIN %s %s";
 
 
 //creates query for table creation based on parameters given
@@ -32,7 +37,7 @@ exports.CreateTableQuery = function(tableName, schema){
     else{
         return '';
     }
-}
+};
 
 
 //creates query for dropping a table based on parameters given
@@ -48,7 +53,7 @@ exports.DropTableQuery = function(tableName){
 //creates query for altering properties of table based on parameters given
 exports.AlterTableQuery = function(){
 
-}
+};
 
 
 //creates query for select based on parameters given
@@ -67,7 +72,7 @@ exports.SelectTableQuery = function(conn, tableName, fields, where, orderByClaus
     var query = util.format(SELECT_SKELETON, fieldsString, tableName, extensionString);
     logger.log('info', "(SELECT QUERY): " + query);
     return query;
-}
+};
 
 
 //creates query for inserting a record into table based on parameters given
@@ -80,7 +85,7 @@ exports.InsertRecordQuery = function(conn, tableName, fields, fieldValues){
     }
     logger.log('info', "(INSERT QUERY): " + query);
     return query;
-}
+};
 
 
 //creates query for inserting multiple records into table based on parameters given
@@ -97,7 +102,7 @@ exports.InsertMultipleRecordQuery = function(conn, tableName, fields, mulFieldVa
     }
     logger.log('info', "(INSERT QUERY): " + query);
     return query;
-}
+};
 
 
 //creates query for deleting a record in table based on parameters given
@@ -110,20 +115,20 @@ exports.DeleteRecordQuery = function(tableName, where, orderByClause, limit){
     }
     logger.log('info', "(DELETE QUERY): " + query);
     return query;
-}
+};
 
 //creates query for updating a record  in table based on parameters given
-exports.UpdateRecordQuery = function(tableName, setData, where, orderByClause, limit){
+exports.UpdateRecordQuery = function(conn, tableName, setData, where, orderByClause, limit){
     var query = '';
     if(tableName != null && setData != null){
         var  extensionString, setString;
-        setString = handleSETCondition(setData);
+        setString = handleSETCondition(conn, setData);
         extensionString = handleSqlConditions(where, orderByClause, limit, null);
         query = util.format(UPDATE_BASE_SKELETON, tableName, setString, extensionString);
     }
     logger.log('info', "(UPDATE QUERY): " + query);
     return query;
-}
+};
 
 exports.CountQuery = function(tableName){
     var query = '';
@@ -132,14 +137,33 @@ exports.CountQuery = function(tableName){
     }
     logger.log('info', "(COUNT QUERY): " + query);
     return query;
-}
+};
 
+
+//creates inner join query string
+exports.JoinQuery = function(type, relation1, relation2, on, using){
+    var query = '', conditionString = '';
+    if(relation1 != null && relation2 !=null){
+        if(relation2.search(" JOIN ") != -1){
+            relation2 = '(' + relation2 + ')';
+        }
+        if(on != null){
+            conditionString += ' ON (' + handleWhereCondition(on) + ')';
+        }
+        if(using != null){
+            conditionString += ' USING (' + convertListToString(using) + ')';
+        }
+        query = handleJoinQueries(type, relation1, relation2, conditionString);
+    }
+    logger.log('info', "(JOIN QUERY): " + query);
+    return query;
+};
 
 
 //helper functions
 
 function convertListToDBString(conn, list, seperator){
-    if(list != null){
+    if(Object.prototype.toString.call( list ) === '[object Array]'){
         for(var i=0; i < list.length; i++){
             list[i] =  conn.escape(list[i]);
         }
@@ -149,7 +173,7 @@ function convertListToDBString(conn, list, seperator){
 }
 
 function convertListToString(list, seperator){
-    if(list != null){
+    if(Object.prototype.toString.call( list ) === '[object Array]'){
         return list.join(seperator);
     }
     return null;
@@ -193,11 +217,11 @@ function processString(string){
     }
 }
 
-function handleSETCondition(setData){
+function handleSETCondition(conn, setData){
     if(setData != null){
         var setDataList = [];
         for(var key in setData){
-            setDataList.push(key + " = " + setData[key]);
+            setDataList.push(key + " = " +  conn.escape(setData[key]));
         }
         return setDataList.join(", ");
     }
@@ -219,4 +243,37 @@ function handleSqlConditions(where, orderByClause, limit, groupByClause){
         extensionString += ' LIMIT ' + conn.escape(Limit);
     }
     return extensionString;
+}
+
+function handleJoinQueries(type, relation1, relation2, conditionString){
+    type = type.toLowerCase();
+    var query;
+    if(type == 'inner join'){
+        query = util.format(INNER_JOIN_SKELETON, relation1, relation2, conditionString);
+    }
+    else if(type == 'cross join'){
+        query = util.format(CROSS_JOIN_SKELETON, relation1, relation2);
+    }
+    else if(type == 'natural join'){
+        query = util.format(NATURAL_JOIN_SKELETON, relation1, '', relation2, conditionString);
+    }
+    else if(type == 'natural left join'){
+        query = util.format(NATURAL_JOIN_SKELETON, relation1, 'LEFT', relation2, conditionString);
+    }
+    else if(type == 'natural right join'){
+        query = util.format(NATURAL_JOIN_SKELETON, relation1, 'RIGHT', relation2, conditionString);
+    }
+    else if(type == 'outer join'){
+        query = util.format(NATURAL_JOIN_SKELETON, relation1, relation2, conditionString);
+    }
+    else if(type == 'left outer join' || type == 'left join'){
+        query = util.format(OUTER_JOIN_SKELETON, relation1, 'LEFT',  relation2, conditionString);
+    }
+    else if(type == 'right outer join' || type == 'right join'){
+        query = util.format(OUTER_JOIN_SKELETON, relation1, 'RIGHT', relation2, conditionString);
+    }
+    else{
+        query = util.format(JOIN_SKELETON, relation1, relation2, conditionString);
+    }
+    return query;
 }

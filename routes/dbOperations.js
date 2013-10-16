@@ -99,7 +99,7 @@ exports.createAppTable = function(req, res){
         res.json(constants.ContentTypeMismatch);
     }
 
-}
+};
 
 
 exports.insertIntoAppTable = function(req, res){
@@ -185,4 +185,162 @@ exports.fetchRecordsFromAppTable = function(req, res){
          logger.log('error', constants.InternalErrorLog);
          res.json(constants.InternalError);
     }
-}
+};
+
+exports.DeleteRecordsFromTable = function(req, res){
+    if(req.get('Content-Type') == 'application/json'){
+        var appName = req.params.appName;
+        var tableName = req.params.tableName;
+        if(appName != null && tableName != null){
+            pool.getConnection(function(err, connection){
+                if(!err){
+                    logger.log('info', constants.ConnectionEstablishedLog);
+                    var query = queryGenerator.SelectTableQuery(connection, constants.APPS, "id", "name eq '" + appName + "'");
+                    connection.query(query, function(err, result){
+                        if(!err && result.length > 0){
+                            tableName = result[0].id + '_' + tableName;
+                            query = queryGenerator.DeleteRecordQuery(tableName, req.body.where, req.body.orderBy,
+                                                                        req.body.limit);
+                            connection.query(query, function(err, result){
+                                if(!err){
+                                    res.json(constants.RecordDeleted);
+                                }
+                                else{
+                                    mysql.ErrorHandler(res, err);
+                                }
+                            });
+                        }
+                        else{
+                            if(err){
+                                mysql.ErrorHandler(res, err);
+                            }
+                            else{
+                                res.json(constants.appDoesNotExist);
+                            }
+                        }
+                    });
+                    connection.release();
+                    logger.log('info', constants.ConnectionReleasedLog);
+                }
+                else{
+                    logger.log('error', constants.DatabaseConnectionErrorLog);
+                    res.json(constants.DatabaseConnectionError);
+                }
+            });
+        }
+        else{
+            logger.log('error', constants.InternalErrorLog);
+            res.json(constants.InternalError);
+        }
+    }
+    else{
+        logger.log('error', constants.ContentTypeMismatchLog);
+        res.json(constants.ContentTypeMismatch);
+    }
+};
+
+
+exports.UpdateRecordInTable = function(req, res){
+    if(req.get('Content-Type') == 'application/json'){
+        var appName = req.params.appName;
+        var tableName = req.params.tableName;
+        if(appName != null && tableName != null){
+            pool.getConnection(function(err, connection){
+                if(!err){
+                    logger.log('info', constants.ConnectionEstablishedLog);
+                    var query = queryGenerator.SelectTableQuery(connection, constants.APPS, "id", "name eq '" + appName + "'");
+                    connection.query(query, function(err, result){
+                        if(!err && result.length > 0){
+                            tableName = result[0].id + '_' + tableName;
+                            query = queryGenerator.UpdateRecordQuery(connection, tableName, req.body.set, req.body.where,
+                                                                     req.body.orderBy, req.body.limit);
+                            connection.query(query, function(err, result){
+                                if(!err){
+                                    res.json(constants.Recordupdated);
+                                }
+                                else{
+                                    console.log(err);
+                                    mysql.ErrorHandler(res, err);
+                                }
+                            });
+                        }
+                        else{
+                            if(err){
+                                mysql.ErrorHandler(res, err);
+                            }
+                            else{
+                                res.json(constants.appDoesNotExist);
+                            }
+                        }
+                    });
+                    connection.release();
+                    logger.log('info', constants.ConnectionReleasedLog);
+                }
+                else{
+                    logger.log('error', constants.DatabaseConnectionErrorLog);
+                    res.json(constants.DatabaseConnectionError);
+                }
+            });
+        }
+        else{
+            logger.log('error', constants.InternalErrorLog);
+            res.json(constants.InternalError);
+        }
+    }
+    else{
+        logger.log('error', constants.ContentTypeMismatchLog);
+        res.json(constants.ContentTypeMismatch);
+    }
+};
+
+exports.JoinOnTables = function(req, res){
+    if(req.get('Content-Type') == 'application/json'){
+        var appName = req.params.appName;
+        if(appName != null){
+            pool.getConnection(function(err, connection){
+                if(!err){
+                    logger.log('info', constants.ConnectionEstablishedLog);
+                    var query = queryGenerator.SelectTableQuery(connection, constants.APPS, "id", "name eq '" + appName + "'");
+                    connection.query(query, function(err, result){
+                        if(!err && result.length > 0){
+                            var appID = result[0].id;
+                            query = helper.processJoinData(connection, appID, req.body);
+                            connection.query(query, function(err, result){
+                                if(!err){
+                                    logger.log('success', constants.SuccessLog);
+                                    res.json({"data": result});
+                                }
+                                else{
+                                    mysql.ErrorHandler(res, err);
+                                }
+                            });
+                        }
+                        else{
+                            if(err){
+                                mysql.ErrorHandler(res, err);
+                            }
+                            else{
+                                logger.log('error', constants.appDoesNotExist);
+                                res.json(constants.appDoesNotExist);
+                            }
+                        }
+                    });
+                    connection.release();
+                    logger.log('info', constants.ConnectionReleasedLog);
+                }
+                else{
+                    logger.log('error', constants.DatabaseConnectionErrorLog);
+                    res.json(constants.DatabaseConnectionError);
+                }
+            });
+        }
+        else{
+            logger.log('error', constants.InternalErrorLog);
+            res.json(constants.InternalError);
+        }
+    }
+    else{
+        logger.log('error', constants.ContentTypeMismatchLog);
+        res.json(constants.ContentTypeMismatch);
+    }
+};
