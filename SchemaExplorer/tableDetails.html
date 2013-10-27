@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+    <title>Table Properties</title>
+    <script type="text/javascript" src="../angular-1.0.8/angular.js"></script>
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="./js/index.js"></script>
+</head>
+<body>
+<ng-include src="'header.html'"></ng-include>
+
+<div class="container" ng-controller="schemaExpController">
+    <span class="span12">&nbsp;</span>
+    <span class="label label-success"> Table Properties</span>
+    <table class="table">
+        <thead>
+        <th ng-repeat="each_key in objKeys">
+            {{each_key}}
+        </th>
+        </thead>
+
+        <tr ng-repeat="each_obj in server_response_json">
+            <div ng-switch='typeof(each_obj)'>
+                <div ng-switch-when="object">
+                    <td ng-repeat="each_key in objKeys">{{each_obj[each_key]}}</td>
+                </div>
+            </div>
+        </tr>
+        <hr>
+    </table>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html ng-app="SchemaExplorer">
+<head>
+    <title>Meta Explorer</title>
+    <script src="../angular-1.0.8/angular.js"></script>
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
+    <script type="text/javascript" src="js/schemaexplorer.js"></script>
+</head>
+<body ng-controller="schemaExpController">
+<ng-include src ="'header.html'"></ng-include>
+<div class="container">
+
+    <!-- URL -->
+
+    <span class="span12">&nbsp;</span>
+    <div class="row">
+        <div class="col-md-2">
+            <span class="label label-success">URL</span>
+        </div>
+        <hr style="visibility: hidden; clear: both; height: 0; border: 0; margin: 0;padding: 0; ">
+        <input type="text" class="form-control input-xxlarge" placeholder="Rest url here...." ng-model="urlInput">
+    </div>
+
+    <!-- Body-->
+
+    <span class="span12">&nbsp;</span>
+    <div class="row">
+        <div class="col-md-2">
+            <span class="label label-success">Request Body</span>
+        </div>
+        <hr style="visibility: hidden; clear: both; height: 0; border: 0; margin: 0;padding: 0; ">
+        <textarea class="form-control input-xxlarge" placeholder="Request body here...." ng-model="bodyInput"></textarea>
+        <span class="span12">&nbsp;</span>
+        <hr style="visibility: hidden; clear: both; height: 0; border: 0; margin: 0;padding: 0; ">
+        <button class="btn btn-success" ng-click="httpGet()">GET <i class="icon-white icon-play-circle"></i></button>
+        <span class="span12">&nbsp;</span>
+        <button class="btn btn-success" ng-click="httpPost()">POST <i class="icon-white icon-play-circle"></i></button>
+    </div>
+
+    <!-- Response-->
+
+    <span class="span12">&nbsp;</span>
+    <div class="row">
+        <div class="col-md-2">
+            <span class="label label-success">Response</span>
+        </div>
+        <span class="span12">&nbsp;</span>
+        <hr style="visibility: hidden; clear: both; height: 0; border: 0; margin: 0;padding: 0; ">
+    <!-- TABLE GENERATION        -->
+        <span ng-bind-html-unsafe='index'></span>
+
+
+        <table class="table">
+            <thead>
+            <th ng-repeat="each_key in objKeys">
+                {{each_key}}
+            </th>
+            </thead>
+
+            <tr ng-repeat="each_obj in server_response_json">
+                <div ng-switch='typeof(each_obj)'>
+                    <div ng-switch-when="object">
+                        <td ng-repeat="each_key in objKeys">{{each_obj[each_key]}}</td>
+                    </div>
+                </div>
+            </tr>
+            <hr>
+        </table>
+    </div>
+</div>
+
+<!-- /.container -->
+</body>
+</html>

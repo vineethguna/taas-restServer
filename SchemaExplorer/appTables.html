@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+    <title>App - Tables</title>
+    <script type="text/javascript" src="../angular-1.0.8/angular.js"></script>
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="./js/index.js"></script>
+</head>
+<body>
+<ng-include src="'header.html'"></ng-include>
+<div class="container" ng-controller="schemaExpController">
+    <span class="span12">&nbsp;</span>
+    <div class="row">
+        <div class="col-md-2">
+            <span class="label label-success">Tables</span>
+        </div>
+        <hr style="padding: 0">
+        <!-- TABLE Creation Details Input        -->
+        <div>
+
+            <input type="text" class="input-large" placeholder="Table Name " ng-model="newTableName"><br/>
+            <input type="text" class="input-large" placeholder="Column Name" ng-model="columnName"><br/>
+            <input type="text" class="input-large" placeholder="Column Type" ng-model="columnType"><br/>
+            <input type="checkbox" class="checkbox" ng-model="isKey"> <span class="label">Is {{columnName}} a key ?</span><br/>
+            <input type="text" class="input-large" placeholder="Default Value" ng-model="defaultVal">
+            <span>&nbsp&nbsp&nbsp</span>
+            <button class="btn-small btn-success" ng-click="addTable()"><i class="icon-white icon-plus"></i>Add Table</button>
+            <span>&nbsp&nbsp&nbsp</span>
+            <button class="btn-small btn-danger" ng-click="deleteTable()"><i class="icon-white icon-minus"></i>Delete Table</button>
+            <span>&nbsp&nbsp&nbsp</span>
+            <span class="text-success">{{postStatus}}</span>
+        </div>
+
+        <!-- TABLE GENERATION        -->
+        <table class="table">
+            <thead>
+            <th ng-repeat="each_key in objKeys">
+                {{each_key}}
+            </th>
+            </thead>
+
+            <tr ng-repeat="each_obj in server_response_json">
+                <div ng-switch='typeof(each_obj)'>
+                    <div ng-switch-when="object">
+                        <td ng-repeat="each_key in objKeys"><a ng-href="{{'./tableDetails.html?appName='+currAppName+'&tableName='+each_obj['tableName']}}"> {{each_obj[each_key]}}</a></td>
+                    </div>
+                </div>
+            </tr>
+            <hr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

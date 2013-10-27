@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+    <title>Apps - Index</title>
+    <script type="text/javascript" src="../angular-1.0.8/angular.js"></script>
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="js/index.js"></script>
+</head>
+<body>
+<ng-include src ="'header.html'"></ng-include>
+<div class="container" ng-controller="schemaExpController">
+    <!-- Response-->
+
+    <span class="span12">&nbsp;</span>
+    <div class="row">
+        <div class="col-md-2">
+            <span class="label label-success">Apps</span>
+        </div>
+        <hr style="padding: 0">
+        <!-- TABLE GENERATION        -->
+        <div>
+            <input type="text" class="input-large" placeholder="App Name " ng-model="newAppName">
+            <span>&nbsp&nbsp&nbsp&nbsp&nbsp</span>
+            <button class="btn-small btn-success" ng-click="addApp()"><i class="icon-white icon-plus"></i>Add App</button>
+            <button class="btn-small btn-danger" ng-click="deleteApp()"><i class="icon-white icon-minus"></i>Delete App</button>
+            <span>&nbsp&nbsp&nbsp&nbsp&nbsp</span>
+            <span class="text-success">{{postStatus}}</span>
+        </div>
+        <table class="table">
+            <thead>
+            <th ng-repeat="each_key in objKeys">
+                {{each_key}}
+            </th>
+            </thead>
+
+            <tr ng-repeat="each_obj in server_response_json">
+                <div ng-switch='typeof(each_obj)'>
+                    <div ng-switch-when="object">
+                        <td ng-repeat="each_key in objKeys"><a ng-href="{{'./appTables.html?appName='+each_obj['name']}}"> {{each_obj[each_key]}}</a></td>
+                    </div>
+                </div>
+            </tr>
+            <hr>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
