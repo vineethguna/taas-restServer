@@ -8,7 +8,8 @@ var logger = require('./logger');
 var pool = mysql.pool;
 
 exports.createAppTable = function(req, res){
-    if(req.get('Content-Type') == 'application/json'){
+    res.header("Access-Control-Allow-Origin", "*");
+    if(req.get('Content-Type').toLowerCase().replace(/\s/g, '') == 'application/json;charset=utf-8'){
         var appName = req.params.appName;
         var tableName = req.params.tableName;
         var appID = null;
@@ -41,7 +42,7 @@ exports.createAppTable = function(req, res){
                                             connection.query("COMMIT", function(err, result){
                                                 if(!err){
                                                     logger.log('success', constants.SuccessLog);
-                                                    res.json({"Success": "Transaction Succeded"});
+                                                    res.json({data:[{"Success": "Transaction Succeeded"}]});
                                                 }
                                                 else{
                                                     mysql.ErrorHandler(res,err);
@@ -60,7 +61,7 @@ exports.createAppTable = function(req, res){
                                 else{
                                     if(!err){
                                         logger.log("error", "Table already Exists");
-                                        res.json({"Error": "Table Already Exists"});
+                                        res.json({"Error": [{Message:"Table Already Exists"}]});
                                     }
                                     else{
                                         mysql.ErrorHandler(res,err);
@@ -103,6 +104,7 @@ exports.createAppTable = function(req, res){
 
 
 exports.insertIntoAppTable = function(req, res){
+    res.header("Access-Control-Allow-Origin", "*");
     var appName = req.params.appName;
     var tableName = req.params.tableName;
     if(appName != null && tableName != null){
@@ -118,7 +120,7 @@ exports.insertIntoAppTable = function(req, res){
                        connection.query(query, function(err, result){
                           if(!err){
                                 logger.log('success', constants.SuccessLog);
-                                res.json({"id": result.insertId});
+                                res.json({data:[{"id": result.insertId}]});
                           }
                           else{
                               mysql.ErrorHandler(res,err);
@@ -146,6 +148,7 @@ exports.insertIntoAppTable = function(req, res){
 };
 
 exports.fetchRecordsFromAppTable = function(req, res){
+    res.header("Access-Control-Allow-Origin", "*");
     var appName = req.params.appName;
     var tableName = req.params.tableName;
     if(appName != null && tableName != null){
@@ -188,7 +191,8 @@ exports.fetchRecordsFromAppTable = function(req, res){
 };
 
 exports.DeleteRecordsFromTable = function(req, res){
-    if(req.get('Content-Type') == 'application/json'){
+    res.header("Access-Control-Allow-Origin", "*");
+    if(req.get('Content-Type').toLowerCase().replace(/\s/g, '') == 'application/json;charset=utf-8'){
         var appName = req.params.appName;
         var tableName = req.params.tableName;
         if(appName != null && tableName != null){
@@ -241,7 +245,8 @@ exports.DeleteRecordsFromTable = function(req, res){
 
 
 exports.UpdateRecordInTable = function(req, res){
-    if(req.get('Content-Type') == 'application/json'){
+    res.header("Access-Control-Allow-Origin", "*");
+    if(req.get('Content-Type').toLowerCase().replace(/\s/g, '') == 'application/json;charset=utf-8'){
         var appName = req.params.appName;
         var tableName = req.params.tableName;
         if(appName != null && tableName != null){
@@ -294,7 +299,8 @@ exports.UpdateRecordInTable = function(req, res){
 };
 
 exports.JoinOnTables = function(req, res){
-    if(req.get('Content-Type') == 'application/json'){
+    res.header("Access-Control-Allow-Origin", "*");
+    if(req.get('Content-Type').toLowerCase().replace(/\s/g, '') == 'application/json;charset=utf-8'){
         var appName = req.params.appName;
         if(appName != null){
             pool.getConnection(function(err, connection){

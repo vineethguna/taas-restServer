@@ -10,6 +10,7 @@ var logger = require('./logger');
 var pool = mysql.pool;
 
 exports.CreateApp = function(req, res){
+    res.header("Access-Control-Allow-Origin", "*");
     var appName = req.params.appName;
     var parameters = [appName];
     if(helper.checkForNullValues(parameters) && appName != 'apps'){
@@ -20,7 +21,7 @@ exports.CreateApp = function(req, res){
                connection.query(query, function(err, result){
                   if(!err){
                         logger.log('success', constants.SuccessLog);
-                        res.json({"id": result.insertId, "name": appName});
+                        res.json({data:[{"id": result.insertId, "name": appName}]});
                   }
                   else{
                       mysql.ErrorHandler(res,err);
@@ -39,9 +40,10 @@ exports.CreateApp = function(req, res){
         logger.log('error', constants.InternalErrorLog);
         res.json(constants.InvalidParameters);
     }
-}
+};
 
 exports.DeleteApp = function(req, res){
+    res.header("Access-Control-Allow-Origin", "*");
     var app_name = req.body.appName;
     var parameters = [app_name];
     if(helper.checkForNullValues(parameters) && req.get('Content-Type') == 'application/json'){
@@ -71,9 +73,10 @@ exports.DeleteApp = function(req, res){
         res.json(constants.InvalidParameters);
     }
 
-}
+};
 
 exports.UpdateApp = function(req, res){
+    res.header("Access-Control-Allow-Origin", "*");
     if(req.method == 'PUT'){
         var present_app_name = req.body.presentAppName;
         var new_app_name = req.body.newAppName;
@@ -88,4 +91,4 @@ exports.UpdateApp = function(req, res){
     else{
         res.json(constants.methodNotFound);
     }
-}
+};

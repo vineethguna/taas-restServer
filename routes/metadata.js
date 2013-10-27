@@ -9,6 +9,7 @@ var pool = mysql.pool;
 
 //get apps metadata
 exports.handleAppMetadata = function(req, res){
+    res.header("Access-Control-Allow-Origin", "*");
     var appName = req.params.appName;
     if(appName == 'apps'){
         getAllRunningApps(req, res);
@@ -86,6 +87,7 @@ function getAppMetadata(req, res, appName){
 
 //get app tables metadata
 exports.getTableMetadata = function(req, res){
+    res.header("Access-Control-Allow-Origin", "*");
     var appName = req.params.appName;
     var tableName = req.params.tableName;
     if(appName != null && tableName != null){

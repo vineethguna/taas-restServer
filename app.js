@@ -11,6 +11,7 @@ var appOperations = require('./routes/appOperations');
 var metadata = require('./routes/metadata');
 var dbops = require('./routes/dbOperations');
 var index = require('./routes/index');
+var httpOptions = require('./routes/httpOptions');
 
 var app = express();
 
@@ -43,7 +44,7 @@ app.post('/:appName/:tableName/insert', dbops.insertIntoAppTable);
 app.get('/:appName/:tableName/fetch', dbops.fetchRecordsFromAppTable);
 app.del('/:appName/:tableName/delete', dbops.DeleteRecordsFromTable);
 app.put('/:appName/:tableName/update', dbops.UpdateRecordInTable);
-app.all('*', index.ErrorData);
+app.all('*',httpOptions.checkHeader);
 
 
 http.createServer(app).listen(app.get('port'), function(){

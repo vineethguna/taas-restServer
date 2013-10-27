@@ -28,35 +28,35 @@ exports.pool = mysql.createPool({
 
 
 //error handler
-exports.ErrorHandler = function(res,err){
+exports.ErrorHandler = function (res, err) {
     var errorCode = err.code, errorMessage;
-    if(errorCode == 'PROTOCOL_CONNECTION_LOST'){
-        errorMessage = "Connection Lost to Mysql Server";
+    if (errorCode == 'PROTOCOL_CONNECTION_LOST') {
+        errorMessage = [{Message :"Connection Lost to Mysql Server"}];
     }
-    else if(errorCode == 'ER_ACCESS_DENIED_ERROR'){
-        errorMessage = "Access Denied";
+    else if (errorCode == 'ER_ACCESS_DENIED_ERROR') {
+        errorMessage = [{Message :"Access Denied"}];
     }
-    else if(errorCode == 'ER_CANT_CREATE_TABLE'){
-        errorMessage = "Cannot Create Table";
+    else if (errorCode == 'ER_CANT_CREATE_TABLE') {
+        errorMessage = [{Message :"Cannot Create Table"}];
     }
-    else if(errorCode == 'ER_CANT_CREATE_DB'){
-        errorMessage = "Error creating Database";
+    else if (errorCode == 'ER_CANT_CREATE_DB') {
+        errorMessage = [{Message :"Error creating Database"}];
     }
-    else if(errorCode == 'ER_TABLE_EXISTS_ERROR'){
-        errorMessage = "TABLE Already Exists"
+    else if (errorCode == 'ER_TABLE_EXISTS_ERROR') {
+        errorMessage = [{Message :"TABLE Already Exists"}];
     }
-    else if(errorCode == 'ER_PARSE_ERROR'){
-        errorMessage = "Error in given Parameters"
+    else if (errorCode == 'ER_PARSE_ERROR') {
+        errorMessage = [{Message :"Error in given Parameters"}];
     }
-    else if(errorCode == 'ER_DUP_ENTRY'){
-        errorMessage = "Duplicate Entry Given";
+    else if (errorCode == 'ER_DUP_ENTRY') {
+        errorMessage = [{Message :"Duplicate Entry Given"}];
     }
-    else{
-        errorMessage = "Unknown SQL error"
+    else {
+        errorMessage = [{Message :"Unknown SQL error"}];
     }
     logger.log('error', "SQL ERROR: " + errorMessage);
     res.json({"Error": errorMessage});
-}
+};
 
 
 
