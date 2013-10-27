@@ -29,6 +29,9 @@ exports.Notables = {"data": [{Message:"There are no tables Associated with this 
 exports.appDeleted = {"data": [{Message:"APP DELETED Successfully"}]};
 exports.Recordupdated = {"data": [{Message:"Record Updated"}]};
 exports.RecordDeleted = {"data": [{Message:"Record Deleted"}]};
+exports.appDeletionError =    {"Error": [{Message:"Error in deleting APP"}]};
+exports.dropTableSuccess = {"data": [{Message: "Table Dropped Successfully"}]};
+exports.TableDoesNotExist = {"Error": [{Message: "Table Does Not Exist"}]};
 
 //log Messages
 exports.InternalErrorLog = "Internal Error Occurred";

@@ -16,9 +16,12 @@ exports.checkForNullValues = function(list){
 exports.returnFieldsAndFieldValues = function(json_object){
     var fields = [];
     var fieldValues = [];
-    for(var key in json_object){
-        fields.push(key);
-        fieldValues.push(json_object[key]);
+    if(json_object != null)
+    {
+        for(var key in json_object){
+            fields.push(key);
+            fieldValues.push(json_object[key]);
+        }
     }
     return [fields, fieldValues];
 }
@@ -84,7 +87,7 @@ function handlePrimaryKey(field, isPrimaryKey, list){
 }
 
 function handleForeignKey(field, references, list){
-    var foreignKeySkeleton = "FOREIGN KEY (%s) REFERENCES %s(%s)";
+    var foreignKeySkeleton = "FOREIGN KEY (%s) REFERENCES %s(%s) ON DELETE CASCADE";
     if(references != null){
         var entity = references["entity"];
         var column = references["column"];

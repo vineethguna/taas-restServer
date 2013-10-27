@@ -94,7 +94,8 @@ exports.getTableMetadata = function(req, res){
         pool.getConnection(function(err, connection){
            if(!err){
                 var nestedQuery = queryGenerator.SelectTableQuery(connection, constants.APPS, "id", "name eq '" + appName + "'");
-                var query = queryGenerator.SelectTableQuery(connection, constants.metadataFields, "*", "appID", null,
+                var whereCondition = "tableName eq '" + tableName + "' and appID";
+                var query = queryGenerator.SelectTableQuery(connection, constants.metadataFields, "*", whereCondition, null,
                                                             null, null, nestedQuery);
                connection.query(query, function(err, result){
                   if(!err){

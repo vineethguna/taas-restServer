@@ -44,20 +44,71 @@ exports.CreateApp = function(req, res){
 
 exports.DeleteApp = function(req, res){
     res.header("Access-Control-Allow-Origin", "*");
-    var app_name = req.body.appName;
-    var parameters = [app_name];
+    var appName = req.params.appName;
+    var parameters = [appName];
     if(helper.checkForNullValues(parameters) && req.get('Content-Type') == 'application/json'){
         pool.getConnection(function(err, connection){
             if(!err){
                 logger.log('info', constants.ConnectionEstablishedLog);
-                var query = queryGenerator.DeleteRecordQuery("apps", "name eq " + "'" + app_name + "'");
+                var query = queryGenerator.SelectTableQuery(connection, constants.APPS, "id", "name eq '" + appName + "'");
                 connection.query(query, function(err, result){
-                    if(!err){
-                        logger.log('success', constants.SuccessLog);
-                        res.json({"id": result.insertId, "name": appName});
+                    if(!err && result.length > 0){
+                        var appID = result[0].id;
+                        query = queryGenerator.SelectTableQuery(connection, constants.metadataEntities, "tableName",
+                            "appID eq " + appID);
+                        connection.query(query, function(err, result){
+                           if(!err){
+                               var multipleQueries = [], index = 0;
+                               multipleQueries[index++] = 'BEGIN';
+                               multipleQueries[index++] = "SET FOREIGN_KEY_CHECKS = 0";
+                               multipleQueries[index++] = queryGenerator.DeleteRecordQuery(constants.APPS, "id eq " + appID);
+                               if(result.length > 0){
+                                   multipleQueries[index++] = queryGenerator.DeleteRecordQuery(constants.metadataEntities,
+                                       "appID eq " + appID);
+                                   multipleQueries[index++] = queryGenerator.DeleteRecordQuery(constants.metadataFields,
+                                       "appID eq " + appID);
+                                   for(var i=0; i < result.length; i++){
+                                       multipleQueries[index++] = queryGenerator.DropTableQuery(appID + "_" + result[i].tableName);
+                                   }
+                               }
+                               multipleQueries[index++] = "SET FOREIGN_KEY_CHECKS = 1";
+                               query = multipleQueries.join(";");
+                               logger.log('info', "(MULTIPLE QUERY): " + query);
+                               connection.query(query, function(err, result){
+                                    if(!err){
+                                        connection.query("COMMIT", function(err, result){
+                                            if(!err){
+                                                logger.log('success', constants.SuccessLog);
+                                                res.json(constants.appDeleted);
+                                            }
+                                            else{
+                                                mysql.ErrorHandler(res,err);
+                                            }
+                                        });
+                                    }
+                                    else{
+                                        console.log(err);
+                                        mysql.ErrorHandler(res,err);
+                                        connection.query("ROLLBACK", function(err, result){
+                                            logger.log('success', "Rollback Successful");
+                                            console.log(result);
+                                        });
+                                    }
+                               });
+                           }
+                           else{
+                               mysql.ErrorHandler(res,err);
+                           }
+                        });
                     }
                     else{
-                        mysql.ErrorHandler(res,err);
+                        if(!err){
+                            logger.log('error', "Given App Does Not exist");
+                            res.json(constants.appDoesNotExist);
+                        }
+                        else{
+                            mysql.ErrorHandler(res,err);
+                        }
                     }
                 });
                 connection.release();

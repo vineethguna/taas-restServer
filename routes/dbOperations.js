@@ -9,7 +9,7 @@ var pool = mysql.pool;
 
 exports.createAppTable = function(req, res){
     res.header("Access-Control-Allow-Origin", "*");
-    if(req.get('Content-Type').toLowerCase().replace(/\s/g, '') == 'application/json;charset=utf-8'){
+    if(req.get('Content-Type').toLowerCase().replace(/\s/g, '') == 'application/json'){
         var appName = req.params.appName;
         var tableName = req.params.tableName;
         var appID = null;
@@ -111,24 +111,30 @@ exports.insertIntoAppTable = function(req, res){
         pool.getConnection(function(err, connection){
            if(!err){
                logger.log('info', constants.ConnectionEstablishedLog);
-               fieldsInfo = helper.returnFieldsAndFieldValues(req.body);
+               var fieldsInfo = helper.returnFieldsAndFieldValues(req.body);
                var query = queryGenerator.SelectTableQuery(connection, constants.APPS, "id", "name eq '" + appName + "'");
                connection.query(query, function(err, result){
-                   if(!err){
+                   if(!err && result.length > 0){
                        tableName = result[0].id + '_' + tableName;
                        query = queryGenerator.InsertRecordQuery(connection, tableName, fieldsInfo[0], fieldsInfo[1]);
                        connection.query(query, function(err, result){
-                          if(!err){
-                                logger.log('success', constants.SuccessLog);
-                                res.json({data:[{"id": result.insertId}]});
-                          }
-                          else{
-                              mysql.ErrorHandler(res,err);
-                          }
+                           if(!err){
+                               logger.log('success', constants.SuccessLog);
+                               res.json({data:[{"id": result.insertId}]});
+                           }
+                           else{
+                               mysql.ErrorHandler(res,err);
+                           }
                        });
                    }
                    else{
-                       mysql.ErrorHandler(res,err);
+                       if(!err){
+                           logger.log('error', "Given App Does Not exist");
+                           res.json(constants.appDoesNotExist);
+                       }
+                       else{
+                           mysql.ErrorHandler(res,err);
+                       }
                    }
                });
                connection.release();
@@ -157,7 +163,7 @@ exports.fetchRecordsFromAppTable = function(req, res){
                 logger.log('info', constants.ConnectionEstablishedLog);
                 var query = queryGenerator.SelectTableQuery(connection, constants.APPS, "id", "name eq '" + appName + "'");
                 connection.query(query, function(err, result){
-                    if(!err){
+                    if(!err && result.length > 0){
                         tableName = result[0].id + "_" + tableName;
                         query = queryGenerator.SelectTableQuery(connection, tableName, req.query.filter, req.query.where, req.query.orderby,
                             req.query.groupby, req.query.limit);
@@ -172,7 +178,13 @@ exports.fetchRecordsFromAppTable = function(req, res){
                         });
                     }
                     else{
-                        mysql.ErrorHandler(res,err);
+                        if(!err){
+                            logger.log('error', "Given App Does Not exist");
+                            res.json(constants.appDoesNotExist);
+                        }
+                        else{
+                            mysql.ErrorHandler(res,err);
+                        }
                     }
                 });
                 connection.release();
@@ -215,11 +227,12 @@ exports.DeleteRecordsFromTable = function(req, res){
                             });
                         }
                         else{
-                            if(err){
-                                mysql.ErrorHandler(res, err);
+                            if(!err){
+                                logger.log('error', "Given App Does Not exist");
+                                res.json(constants.appDoesNotExist);
                             }
                             else{
-                                res.json(constants.appDoesNotExist);
+                                mysql.ErrorHandler(res,err);
                             }
                         }
                     });
@@ -270,11 +283,12 @@ exports.UpdateRecordInTable = function(req, res){
                             });
                         }
                         else{
-                            if(err){
-                                mysql.ErrorHandler(res, err);
+                            if(!err){
+                                logger.log('error', "Given App Does Not exist");
+                                res.json(constants.appDoesNotExist);
                             }
                             else{
-                                res.json(constants.appDoesNotExist);
+                                mysql.ErrorHandler(res,err);
                             }
                         }
                     });
@@ -300,7 +314,7 @@ exports.UpdateRecordInTable = function(req, res){
 
 exports.JoinOnTables = function(req, res){
     res.header("Access-Control-Allow-Origin", "*");
-    if(req.get('Content-Type').toLowerCase().replace(/\s/g, '') == 'application/json;charset=utf-8'){
+    if(req.get('Content-Type').toLowerCase().replace(/\s/g, '') == 'application/json'){
         var appName = req.params.appName;
         if(appName != null){
             pool.getConnection(function(err, connection){
@@ -322,12 +336,12 @@ exports.JoinOnTables = function(req, res){
                             });
                         }
                         else{
-                            if(err){
-                                mysql.ErrorHandler(res, err);
+                            if(!err){
+                                logger.log('error', "Given App Does Not exist");
+                                res.json(constants.appDoesNotExist);
                             }
                             else{
-                                logger.log('error', constants.appDoesNotExist);
-                                res.json(constants.appDoesNotExist);
+                                mysql.ErrorHandler(res,err);
                             }
                         }
                     });
@@ -350,3 +364,86 @@ exports.JoinOnTables = function(req, res){
         res.json(constants.ContentTypeMismatch);
     }
 };
+
+exports.DropTable = function(req, res){
+    res.header("Access-Control-Allow-Origin", "*");
+    var appName = req.params.appName;
+    var tableName = req.params.tableName;
+    if(appName != null && tableName != null){
+        pool.getConnection(function(err, connection){
+            if(!err){
+                logger.log('info', constants.ConnectionEstablishedLog);
+                var query = queryGenerator.SelectTableQuery(connection, constants.APPS, "id", "name eq '" + appName + "'");
+                connection.query(query, function(err, result){
+                    if(!err && result.length > 0){
+                        var appID = result[0].id;
+                        var where = "appID eq " + result[0].id + " and tableName eq '" + tableName + "'";
+                        query = queryGenerator.SelectTableQuery(connection, constants.metadataEntities, "tableName", where);
+                        connection.query(query, function(err, result){
+                            if(!err && result.length > 0){
+                                var multipleQueries = [], index = 0;
+                                multipleQueries[index++] = "BEGIN";
+                                multipleQueries[index++] = queryGenerator.DeleteRecordQuery(constants.metadataEntities, where);
+                                multipleQueries[index++] = queryGenerator.DeleteRecordQuery(constants.metadataFields, where);
+                                tableName = appID + "_" + tableName;
+                                multipleQueries[index++] = queryGenerator.DropTableQuery(tableName);
+                                query = multipleQueries.join(";");
+                                logger.log('info', "(MULTIPLE QUERY): " + query);
+                                connection.query(query, function(err, result){
+                                    if(!err){
+                                        connection.query("COMMIT", function(err, result){
+                                            if(!err){
+                                                logger.log('success', constants.SuccessLog);
+                                                res.json(constants.dropTableSuccess);
+                                            }
+                                            else{
+                                                mysql.ErrorHandler(res,err);
+                                            }
+                                        });
+                                    }
+                                    else{
+                                        console.log(err);
+                                        mysql.ErrorHandler(res,err);
+                                        connection.query("ROLLBACK", function(err, result){
+                                            logger.log('success', "Rollback Successful");
+                                            console.log(result);
+                                        });
+                                    }
+                                });
+                            }
+                            else{
+                                if(!err){
+                                    logger.log('error', "Given Table Does Not exist");
+                                    res.json(constants.TableDoesNotExist);
+                                }
+                                else{
+                                    mysql.ErrorHandler(res,err);
+                                }
+                            }
+                        });
+
+                    }
+                    else{
+                        if(!err){
+                            logger.log('error', "Given App Does Not exist");
+                            res.json(constants.appDoesNotExist);
+                        }
+                        else{
+                            mysql.ErrorHandler(res,err);
+                        }
+                    }
+                });
+                connection.release();
+                logger.log('info', constants.ConnectionReleasedLog);
+            }
+            else{
+                logger.log('error', constants.DatabaseConnectionErrorLog);
+                res.json(constants.DatabaseConnectionError);
+            }
+        });
+    }
+    else{
+        logger.log('error', constants.InternalErrorLog);
+        res.json(constants.InternalError);
+    }
+}
