@@ -46,7 +46,7 @@ exports.DeleteApp = function(req, res){
     res.header("Access-Control-Allow-Origin", "*");
     var appName = req.params.appName;
     var parameters = [appName];
-    if(helper.checkForNullValues(parameters) && req.get('Content-Type') == 'application/json'){
+    if(helper.checkForNullValues(parameters)){
         pool.getConnection(function(err, connection){
             if(!err){
                 logger.log('info', constants.ConnectionEstablishedLog);
