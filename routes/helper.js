@@ -74,8 +74,11 @@ function handleTypeAndProperties(field, type, properties, defaultValue){
             return null;
         }
     }
-    if(defaultValue != null){
+    if(defaultValue != null && typeof defaultValue == 'number'){
         tempString += ' DEFAULT ' + defaultValue;
+    }
+    else{
+        tempString += " DEFAULT '" + defaultValue + "'";
     }
     return tempString;
 }
