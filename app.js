@@ -16,9 +16,10 @@ var httpOptions = require('./routes/httpOptions');
 var app = express();
 
 // all environments
+app.use(express.static(path.join(__dirname, 'public')));
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
+app.engine('html', require('ejs').renderFile);
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
@@ -26,7 +27,6 @@ app.use(express.methodOverride());
 app.use(express.cookieParser('your secret here'));
 app.use(express.session());
 app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
 if ('development' == app.get('env')) {
@@ -46,6 +46,10 @@ app.post('/:appName/:tableName/insert', dbops.insertIntoAppTable);
 app.get('/:appName/:tableName/fetch', dbops.fetchRecordsFromAppTable);
 app.del('/:appName/:tableName/delete', dbops.DeleteRecordsFromTable);
 app.put('/:appName/:tableName/update', dbops.UpdateRecordInTable);
+app.get('/api-docs-info', index.apiDocs);
+app.get('/api-docs-info/metadataDocs', index.metadata);
+app.get('/api-docs-info/appOperationsDocs', index.appOperations);
+app.get('/api-docs-info/appTableOperationsDocs', index.appTableOperations);
 app.all('*',httpOptions.checkHeader);
 
 

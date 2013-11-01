@@ -240,7 +240,7 @@ function handleSqlConditions(where, orderByClause, limit, groupByClause){
         extensionString += ' GROUP BY ' + groupByClause;
     }
     if(limit != null){
-        extensionString += ' LIMIT ' + conn.escape(Limit);
+        extensionString += ' LIMIT ' + limit;
     }
     return extensionString;
 }

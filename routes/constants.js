@@ -9,6 +9,7 @@ exports.metadataFields = "metadataFields";
 exports.APPCols = ["id", "name"];
 exports.metadataEntitiesCols = ["appID", "tableName"];
 exports.metadataFieldsCols = ["appID", "tableName", "fieldName", "isRequired", "fieldType", "defaultvalue"];
+exports.URL = "http://ec2-54-254-159-160.ap-southeast-1.compute.amazonaws.com";
 
 
 

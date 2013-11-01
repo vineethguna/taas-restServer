@@ -215,8 +215,8 @@ exports.DeleteRecordsFromTable = function(req, res){
                     connection.query(query, function(err, result){
                         if(!err && result.length > 0){
                             tableName = result[0].id + '_' + tableName;
-                            query = queryGenerator.DeleteRecordQuery(tableName, req.body.where, req.body.orderBy,
-                                                                        req.body.limit);
+                            query = queryGenerator.DeleteRecordQuery(tableName, req.query.where, req.query.orderBy,
+                                                                        req.query.limit);
                             connection.query(query, function(err, result){
                                 if(!err){
                                     res.json(constants.RecordDeleted);
@@ -446,4 +446,4 @@ exports.DropTable = function(req, res){
         logger.log('error', constants.InternalErrorLog);
         res.json(constants.InternalError);
     }
-}
+};
