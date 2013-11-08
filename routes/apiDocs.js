@@ -351,7 +351,35 @@ exports.appTableOperations = {
                     ]
                 }
             ]
+        },
+        {
+            "path" : "/{appName}/{tableName}/update",
+            "operations" : [
+                {
+                    "method" : "PUT",
+                    "nickname" : "updateRecordsInTable",
+                    "summary" : "Update records in specified table in app",
+                    "type" : "columnName",
+                    "parameters" : [
+                        {
+                            "paramType" : "path",
+                            "name" : "appName",
+                            "description" : "App name for which the records in table need to be deleted",
+                            "dataType" : "string",
+                            "required" : true
+                        },
+                        {
+                            "paramType" : "path",
+                            "name" : "tableName",
+                            "description" : "Table name for which the records need to be deleted",
+                            "dataType" : "string",
+                            "required" : true
+                        }
+                    ]
+                }
+            ]
         }
+
     ],
     "models" : {
         "column" : {
