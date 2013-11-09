@@ -9,7 +9,8 @@ var pool = mysql.pool;
 
 exports.createAppTable = function(req, res){
     res.header("Access-Control-Allow-Origin", "*");
-    if(req.get('Content-Type').toLowerCase().replace(/\s/g, '') == 'application/json;charset=utf-8'){
+    var contentType = req.get('Content-Type').toLowerCase().replace(/\s/g, '');
+    if(contentType == 'application/json;charset=utf-8' || contentType == 'application/json'){
         var appName = req.params.appName;
         var tableName = req.params.tableName;
         var appID = null;
@@ -204,7 +205,8 @@ exports.fetchRecordsFromAppTable = function(req, res){
 
 exports.DeleteRecordsFromTable = function(req, res){
     res.header("Access-Control-Allow-Origin", "*");
-    if(req.get('Content-Type').toLowerCase().replace(/\s/g, '') == 'application/json;charset=utf-8'){
+    var contentType = req.get('Content-Type').toLowerCase().replace(/\s/g, '');
+    if(contentType == 'application/json;charset=utf-8' || contentType == 'application/json'){
         var appName = req.params.appName;
         var tableName = req.params.tableName;
         if(appName != null && tableName != null){
@@ -259,7 +261,8 @@ exports.DeleteRecordsFromTable = function(req, res){
 
 exports.UpdateRecordInTable = function(req, res){
     res.header("Access-Control-Allow-Origin", "*");
-    if(req.get('Content-Type').toLowerCase().replace(/\s/g, '') == 'application/json;charset=utf-8'){
+    var contentType = req.get('Content-Type').toLowerCase().replace(/\s/g, '');
+    if(contentType == 'application/json;charset=utf-8' || contentType == 'application/json'){
         var appName = req.params.appName;
         var tableName = req.params.tableName;
         if(appName != null && tableName != null){
@@ -314,7 +317,8 @@ exports.UpdateRecordInTable = function(req, res){
 
 exports.JoinOnTables = function(req, res){
     res.header("Access-Control-Allow-Origin", "*");
-    if(req.get('Content-Type').toLowerCase().replace(/\s/g, '') == 'application/json;charset=utf-8'){
+    var contentType = req.get('Content-Type').toLowerCase().replace(/\s/g, '');
+    if(contentType == 'application/json;charset=utf-8' || contentType == 'application/json'){
         var appName = req.params.appName;
         if(appName != null){
             pool.getConnection(function(err, connection){
